@@ -1,0 +1,79 @@
+# Seawaste Detection Dataset Configuration
+# This file defines the dataset structure and classes for marine waste detection
+
+# Dataset paths
+path: ../data/datasets/seawaste  # Root directory
+train: images/train  # Train images relative to 'path'
+val: images/val      # Validation images relative to 'path'
+test: images/test    # Test images relative to 'path'
+
+# Classes for Seawaste Detection
+# Based on common marine debris categories
+nc: 15  # Number of classes
+
+names:
+  0: plastic_bottle
+  1: plastic_bag
+  2: fishing_net
+  3: fishing_line
+  4: buoy
+  5: styrofoam
+  6: metal_can
+  7: glass_bottle
+  8: food_container
+  9: cigarette_butt
+  10: straw
+  11: rope
+  12: cloth_fabric
+  13: wood_debris
+  14: other_plastic
+
+# Class descriptions for research documentation
+class_info:
+  plastic_bottle: "PET and HDPE bottles commonly found in marine environments"
+  plastic_bag: "Single-use plastic bags and sheets"
+  fishing_net: "Abandoned or lost fishing nets (ghost nets)"
+  fishing_line: "Monofilament and multifilament fishing lines"
+  buoy: "Floating markers and buoys"
+  styrofoam: "Expanded polystyrene foam products"
+  metal_can: "Aluminum and steel beverage/food cans"
+  glass_bottle: "Glass containers and bottles"
+  food_container: "Plastic food packaging and containers"
+  cigarette_butt: "Cigarette filters and tobacco products"
+  straw: "Plastic drinking straws"
+  rope: "Synthetic and natural fiber ropes"
+  cloth_fabric: "Textile materials and clothing"
+  wood_debris: "Processed wood waste (not natural driftwood)"
+  other_plastic: "Miscellaneous plastic waste not in other categories"
+
+# Dataset statistics (to be updated after annotation)
+dataset_stats:
+  total_images: 0
+  train_images: 0
+  val_images: 0
+  test_images: 0
+  annotations: 0
+
+# Data augmentation settings
+augmentation:
+  enable: true
+  hsv_h: 0.015  # Image HSV-Hue augmentation (fraction)
+  hsv_s: 0.7    # Image HSV-Saturation augmentation (fraction)
+  hsv_v: 0.4    # Image HSV-Value augmentation (fraction)
+  degrees: 0.0   # Image rotation (+/- deg)
+  translate: 0.1 # Image translation (+/- fraction)
+  scale: 0.5     # Image scale (+/- gain)
+  shear: 0.0     # Image shear (+/- deg)
+  perspective: 0.0  # Image perspective (+/- fraction)
+  flipud: 0.0    # Image flip up-down (probability)
+  fliplr: 0.5    # Image flip left-right (probability)
+  mosaic: 1.0    # Image mosaic (probability)
+  mixup: 0.0     # Image mixup (probability)
+  copy_paste: 0.0  # Segment copy-paste (probability)
+
+# Marine/Underwater specific augmentation
+marine_augmentation:
+  water_color_shift: true
+  turbidity_simulation: true
+  light_attenuation: true
+  caustic_patterns: false

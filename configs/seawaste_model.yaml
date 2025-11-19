@@ -1,0 +1,117 @@
+# Custom YOLOv8 Model Configuration for Seawaste Detection
+# This configuration is optimized for detecting marine debris in various conditions
+
+# Model architecture base
+model_base: yolov8m  # Options: yolov8n, yolov8s, yolov8m, yolov8l, yolov8x
+
+# Training hyperparameters
+hyperparameters:
+  # Learning rate settings
+  lr0: 0.01              # Initial learning rate
+  lrf: 0.01              # Final learning rate (lr0 * lrf)
+  momentum: 0.937        # SGD momentum/Adam beta1
+  weight_decay: 0.0005   # Optimizer weight decay
+  warmup_epochs: 3.0     # Warmup epochs
+  warmup_momentum: 0.8   # Warmup initial momentum
+  warmup_bias_lr: 0.1    # Warmup initial bias lr
+
+  # Loss function weights
+  box: 7.5               # Box loss gain
+  cls: 0.5               # Class loss gain
+  dfl: 1.5               # DFL loss gain
+
+  # Training settings
+  epochs: 300
+  batch_size: 16
+  imgsz: 640             # Input image size
+  patience: 50           # Epochs to wait for no improvement (early stopping)
+
+  # Optimization
+  optimizer: Adam        # Options: SGD, Adam, AdamW, RMSProp
+  close_mosaic: 10       # Disable mosaic augmentation for final epochs
+
+  # Multi-scale training
+  scale: 0.5             # Image scale (+/- gain)
+
+  # Class weights (optional, can be adjusted based on class imbalance)
+  class_weights: null
+
+# Model-specific configurations for marine environment
+marine_optimizations:
+  # Enhanced feature extraction for underwater/marine imagery
+  enhanced_low_light: true
+  color_correction: true
+
+  # Anchor box optimization for typical marine debris sizes
+  # These should be tuned based on your dataset statistics
+  anchors:
+    - [10, 13, 16, 30, 33, 23]      # P3/8
+    - [30, 61, 62, 45, 59, 119]     # P4/16
+    - [116, 90, 156, 198, 373, 326] # P5/32
+
+  # Focus on small object detection (important for distant debris)
+  small_object_boost: true
+  min_object_size: 10  # Minimum object size in pixels
+
+# Model architecture customization
+architecture:
+  # Backbone
+  backbone: CSPDarknet
+  depth_multiple: 0.67   # Model depth multiplier
+  width_multiple: 0.75   # Layer channel multiplier
+
+  # Neck
+  neck: PANet
+
+  # Head
+  head: Detect
+
+  # Additional features
+  attention_mechanism: CBAM  # Options: CBAM, SE, ECA, None
+  use_spp: true              # Spatial Pyramid Pooling
+  use_focus: true            # Focus layer for efficient downsampling
+
+# Inference settings
+inference:
+  conf_threshold: 0.25   # Confidence threshold
+  iou_threshold: 0.45    # NMS IoU threshold
+  max_det: 300           # Maximum number of detections per image
+  agnostic_nms: false    # Class-agnostic NMS
+
+# Model evaluation metrics
+metrics:
+  - mAP50        # Mean Average Precision at IoU=0.50
+  - mAP50-95     # Mean Average Precision at IoU=0.50:0.95
+  - precision
+  - recall
+  - f1_score
+
+# Hardware settings
+device: auto  # auto, cpu, cuda, mps, or specific GPU id (0, 1, 2, ...)
+workers: 8    # Number of data loading workers
+amp: true     # Automatic Mixed Precision training
+
+# Logging and checkpointing
+logging:
+  project: seawaste_detection
+  name: custom_model_v1
+  save_dir: ./runs
+  save_period: 10        # Save checkpoint every N epochs
+  log_interval: 10       # Log metrics every N iterations
+
+# Weights & Biases / MLflow integration
+experiment_tracking:
+  use_wandb: false
+  use_mlflow: false
+  use_tensorboard: true
+
+# Model export formats (for deployment)
+export_formats:
+  - pytorch      # .pt
+  - onnx         # .onnx
+  - torchscript  # .torchscript
+  - tflite       # .tflite (for mobile)
+
+# Resume training
+resume: false
+resume_checkpoint: null  # Path to checkpoint file
