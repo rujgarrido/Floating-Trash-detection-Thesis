@@ -1,4 +1,4 @@
-# Seawaste Detection Model
+# Seawaste - Floating Trash Detection Model
 
 A custom deep learning model for detecting marine debris and waste in underwater/ocean imagery. This project implements a state-of-the-art object detection system optimized for identifying various types of marine pollution.
 
